@@ -42,4 +42,3 @@ SELECT * FROM cars_owned;
 DELETE FROM cars_owned WHERE person_id = 2 AND car_model = 'BMW';
 
 UPDATE cars_owned SET car_millage = 66666 WHERE person_id=2 and car_model='Jaguar' and cars_owned_id=2;
-SELECT person_id FROM cars_owned WHERE person_id = 1 and car_model = 'ba' and cars_owned_id=2;
