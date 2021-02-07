@@ -19,29 +19,29 @@ namespace CarOwners.Service
             Rep = new CarOwnersRepository();
         }
 
-        public List<string> GetAll()
+        public async Task<List<string>> GetAllAsync()
         {
-            return Rep.GetAll();
+            return await Rep.GetAllAsync();
         }
 
-        public List<string> GetPersonCar(int person_id)
+        public async Task<List<string>> GetPersonCarAsync(int person_id)
         {
-            return Rep.GetPersonCar(person_id);
+            return await Rep.GetPersonCarAsync(person_id);
         }
 
-        public string NewPerson(Person person)
+        public async Task<string> NewPersonAsync(Person person)
         {
-            return Rep.NewPerson(person);
+            return await Rep.NewPersonAsync(person);
         }
 
-        public string UpdateCar(int person_id, Car car)
+        public async Task<string> UpdateCarAsync(int person_id, Car car)
         {
-            return Rep.UpdateCar(person_id, car);
+            return await Rep.UpdateCarAsync(person_id, car);
         }
 
-        public string DeleteCar(int person_id, Car car)
+        public async Task<string> DeleteCarAsync(int person_id, Car car)
         {
-            return Rep.DeleteCar(person_id, car);
+            return await Rep.DeleteCarAsync(person_id, car);
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Web.Http;
 using CarOwners.Service;
 using CarOwners.Service.Common;
 using CarOwners.Model;
+using System.Threading.Tasks;
 
 namespace CarOwners.WebAPI.Controllers
 {
@@ -17,12 +18,10 @@ namespace CarOwners.WebAPI.Controllers
 
         [HttpGet]
         [Route("api/GetAll")]
-        public HttpResponseMessage GetAll()
+        public async Task<HttpResponseMessage> GetAllAsync()
         {
 
-            List<string> ret = new List<string>();
-
-            ret = service.GetAll();
+            List<string> ret = await service.GetAllAsync();
 
             if(ret.Count() == 0)
             {
@@ -35,13 +34,11 @@ namespace CarOwners.WebAPI.Controllers
 
 
         [HttpGet]
-        [Route("api/GetPersonCar/{id}")]
-        public HttpResponseMessage GetPersonCar(int person_id)
+        [Route("api/GetPersonCar/{person_id}")]
+        public async Task<HttpResponseMessage> GetPersonCarAsync(int person_id)
         {
 
-            List<string> ret = new List<string>();
-
-            ret = service.GetPersonCar(person_id);
+            List<string> ret = await service.GetPersonCarAsync(person_id);
 
             if (ret.Count() == 0)
             {
@@ -54,10 +51,10 @@ namespace CarOwners.WebAPI.Controllers
 
         [HttpPost]
         [Route("api/NewPerson")]
-        public HttpResponseMessage NewPerson([FromBody] Person person)
+        public async Task<HttpResponseMessage> NewPersonAsync([FromBody] Person person)
         {
 
-            string ret = service.NewPerson(person);
+            string ret = await service.NewPersonAsync(person);
 
             if(ret == "OK")
             {
@@ -70,10 +67,10 @@ namespace CarOwners.WebAPI.Controllers
 
         [HttpPut]
         [Route("api/UpdateCar/{person_id}")]
-        public HttpResponseMessage UpdateCar(int person_id, [FromBody] Car car)
+        public async Task<HttpResponseMessage> UpdateCarAsync(int person_id, [FromBody] Car car)
         {
 
-            string ret = service.UpdateCar(person_id, car);
+            string ret = await service.UpdateCarAsync(person_id, car);
 
             if (ret == "OK")
             {
@@ -86,10 +83,10 @@ namespace CarOwners.WebAPI.Controllers
 
         [HttpDelete]
         [Route("api/DeleteCar/{person_id}")]
-        public HttpResponseMessage DeleteCar(int person_id, [FromBody] Car car)
+        public async Task<HttpResponseMessage> DeleteCarAsync(int person_id, [FromBody] Car car)
         {
 
-            string ret = service.DeleteCar(person_id, car);
+            string ret = await service.DeleteCarAsync(person_id, car);
 
             if (ret == "OK")
             {

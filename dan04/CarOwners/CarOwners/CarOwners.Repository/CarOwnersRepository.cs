@@ -13,7 +13,7 @@ namespace CarOwners.Repository
     {
         SqlConnection con = new SqlConnection("data source=.; database=master; integrated security=SSPI");
 
-        public List<string> GetAll()
+        public async Task<List<string>> GetAllAsync()
         {
             List<string> ret = new List<string>();
 
@@ -22,7 +22,7 @@ namespace CarOwners.Repository
                 SqlCommand cmd = new SqlCommand("SELECT * FROM person", con);
 
                 con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
+                SqlDataReader rdr = await Task.Run(() => cmd.ExecuteReader());
 
 
                 if (rdr.HasRows)
@@ -41,7 +41,7 @@ namespace CarOwners.Repository
             return ret;
         }
 
-        public List<string> GetPersonCar(int person_id)
+        public async Task<List<string>> GetPersonCarAsync(int person_id)
         {
             List<string> ret = new List<string>();
 
@@ -51,7 +51,7 @@ namespace CarOwners.Repository
                 SqlCommand cmd = new SqlCommand(String.Format("SELECT car_model, car_year FROM cars_owned " + "where person_id={0}", person_id), con);
 
                 con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
+                SqlDataReader rdr = await Task.Run(() => cmd.ExecuteReader());
 
 
                 if (rdr.HasRows)
@@ -70,7 +70,7 @@ namespace CarOwners.Repository
         }
 
 
-        public string NewPerson(Person person)
+        public async Task<string> NewPersonAsync(Person person)
         {
             using (con)
             {
@@ -80,7 +80,7 @@ namespace CarOwners.Repository
 
                 try
                 {
-                    cmd.ExecuteNonQuery();
+                    await Task.Run(() => cmd.ExecuteNonQuery());
                     con.Close();
                     return ("OK");
                 }
@@ -94,7 +94,7 @@ namespace CarOwners.Repository
         }
 
 
-        public string UpdateCar(int person_id, Car car)
+        public async Task<string> UpdateCarAsync(int person_id, Car car)
         {
             using (con)
             {
@@ -107,7 +107,7 @@ namespace CarOwners.Repository
 
                 try
                 {
-                    SqlDataReader rdr = help.ExecuteReader();
+                    SqlDataReader rdr = await Task.Run(() => help.ExecuteReader());
                     if(!rdr.HasRows)
                     {
                         con.Close();
@@ -116,7 +116,7 @@ namespace CarOwners.Repository
                     {
                         rdr.Close();
                         SqlCommand cmd = new SqlCommand(String.Format("UPDATE cars_owned SET car_millage = {0} WHERE person_id={1} and car_model='{2}' and cars_owned_id='{3}'", car.CarMillage, person_id, car.CarModel, car.CarsOwnedId), con);
-                        cmd.ExecuteNonQuery();
+                        await Task.Run(() => cmd.ExecuteNonQuery());
                         con.Close();
                         return ("OK");
                     }
@@ -131,7 +131,7 @@ namespace CarOwners.Repository
         }
 
 
-        public string DeleteCar(int person_id, Car car)
+        public async Task<string> DeleteCarAsync(int person_id, Car car)
         {
             using (con)
             {
@@ -142,7 +142,7 @@ namespace CarOwners.Repository
 
                 try
                 {
-                    SqlDataReader rdr = help.ExecuteReader();
+                    SqlDataReader rdr = await Task.Run(() => help.ExecuteReader());
 
                     if (!rdr.HasRows)
                     {
@@ -153,7 +153,7 @@ namespace CarOwners.Repository
                     {
                         rdr.Close();
                         SqlCommand cmd = new SqlCommand(String.Format("DELETE FROM cars_owned WHERE person_id = {0} AND car_model = '{1}' and cars_owned_id={2};", person_id, car.CarModel, car.CarsOwnedId), con);
-                        cmd.ExecuteNonQuery();
+                        await Task.Run(() => cmd.ExecuteNonQuery());
                         con.Close();
                         return ("OK");
                     }

@@ -9,10 +9,10 @@ namespace CarOwners.Repository.Common
 {
     public interface ICarOwnersRepository
     {
-        List<string> GetAll();
-        List<string> GetPersonCar(int person_id);
-        string NewPerson(Person person);
-        string UpdateCar(int person_id, Car car);
-        string DeleteCar(int person_id, Car car);
+        Task<List<string>> GetAllAsync();
+        Task<List<string>> GetPersonCarAsync(int person_id);
+        Task<string> NewPersonAsync(Person person);
+        Task<string> UpdateCarAsync(int person_id, Car car);
+        Task<string> DeleteCarAsync(int person_id, Car car);
     }
 }
