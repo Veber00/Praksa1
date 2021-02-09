@@ -13,9 +13,10 @@ namespace CarOwners.Repository
     {
         SqlConnection con = new SqlConnection("data source=.; database=master; integrated security=SSPI");
 
-        public async Task<List<string>> GetAllAsync()
+        public async Task<List<Person>> GetAllAsync()
         {
-            List<string> ret = new List<string>();
+            
+            List<Person> ret = new List<Person>();
 
             using (con)
             {
@@ -29,7 +30,11 @@ namespace CarOwners.Repository
                 {
                     while (rdr.Read())
                     {
-                        ret.Add(rdr.GetInt32(0) + " " + rdr.GetString(1) + " " + rdr.GetInt32(2));
+                        Person person = new Person();
+                        person.PersonId = rdr.GetInt32(0);
+                        person.FullName = rdr.GetString(1);
+                        person.Age = rdr.GetInt32(2);
+                        ret.Add(person);
                     }
 
                 }
@@ -41,14 +46,15 @@ namespace CarOwners.Repository
             return ret;
         }
 
-        public async Task<List<string>> GetPersonCarAsync(int person_id)
+        public async Task<List<Car>> GetPersonCarAsync(int person_id)
         {
-            List<string> ret = new List<string>();
+
+            List<Car> ret = new List<Car>();
 
             using (con)
             {
 
-                SqlCommand cmd = new SqlCommand(String.Format("SELECT car_model, car_year FROM cars_owned " + "where person_id={0}", person_id), con);
+                SqlCommand cmd = new SqlCommand(String.Format("SELECT * FROM cars_owned " + "where person_id={0}", person_id), con);
 
                 con.Open();
                 SqlDataReader rdr = await Task.Run(() => cmd.ExecuteReader());
@@ -58,7 +64,13 @@ namespace CarOwners.Repository
                 {
                     while (rdr.Read())
                     {
-                        ret.Add(rdr.GetString(0) + " " + rdr.GetInt32(1));
+                        Car car = new Car();
+                        car.CarsOwnedId = rdr.GetInt32(0);
+                        car.PersonId = rdr.GetInt32(1);
+                        car.CarModel = rdr.GetString(2);
+                        car.CarYear = rdr.GetInt32(3);
+                        car.CarMillage = rdr.GetInt32(4);
+                        ret.Add(car);
                     }
                 }
                 con.Close();

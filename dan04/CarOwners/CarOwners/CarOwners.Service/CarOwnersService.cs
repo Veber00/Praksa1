@@ -19,12 +19,12 @@ namespace CarOwners.Service
             Rep = new CarOwnersRepository();
         }
 
-        public async Task<List<string>> GetAllAsync()
+        public async Task<List<Person>> GetAllAsync()
         {
             return await Rep.GetAllAsync();
         }
 
-        public async Task<List<string>> GetPersonCarAsync(int person_id)
+        public async Task<List<Car>> GetPersonCarAsync(int person_id)
         {
             return await Rep.GetPersonCarAsync(person_id);
         }

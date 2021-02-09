@@ -8,6 +8,7 @@ using CarOwners.Service;
 using CarOwners.Service.Common;
 using CarOwners.Model;
 using System.Threading.Tasks;
+using CarOwners.WebAPI.Models;
 
 namespace CarOwners.WebAPI.Controllers
 {
@@ -21,14 +22,20 @@ namespace CarOwners.WebAPI.Controllers
         public async Task<HttpResponseMessage> GetAllAsync()
         {
 
-            List<string> ret = await service.GetAllAsync();
+            List<Person> ret = await service.GetAllAsync();
+            List<RestPerson> restRet = new List<RestPerson>();
 
             if(ret.Count() == 0)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Table is empty!");
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, ret);
+            foreach(Person person in ret)
+            {
+                restRet.Add(new RestPerson { FullName = person.FullName, Age = person.Age });
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, restRet);
                 
         }
 
@@ -38,14 +45,20 @@ namespace CarOwners.WebAPI.Controllers
         public async Task<HttpResponseMessage> GetPersonCarAsync(int person_id)
         {
 
-            List<string> ret = await service.GetPersonCarAsync(person_id);
+            List<Car> ret = await service.GetPersonCarAsync(person_id);
+            List<RestCar> restRet = new List<RestCar>();
 
             if (ret.Count() == 0)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound, "This person doesn't have a car.");
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, ret);
+            foreach(Car car in ret)
+            {
+                restRet.Add(new RestCar { CarModel = car.CarModel, CarYear = car.CarYear, CarMillage = car.CarMillage });
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, restRet);
 
         }
 
