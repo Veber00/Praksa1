@@ -6,18 +6,37 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Autofac;
+using CarOwners.Model;
+using CarOwners.Repository;
+using CarOwners.Service;
+using Autofac.Integration.WebApi;
+using System.Reflection;
 
 namespace CarOwners.WebAPI
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
-        protected void Application_Start()
+        private static IContainer container { get; set; }
+        protected void Application_Start(object sender, EventArgs e)
         {
-            AreaRegistration.RegisterAllAreas();
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            var builder = new ContainerBuilder();
+
+            builder.RegisterModule<CarOwnersRepositoryModule>();
+            builder.RegisterModule<CarOwnersServiceModule>();
+            builder.RegisterModule<CarOwnersModelModule>();
+            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+
+            
+
+            var container = builder.Build();
+            var resolver = new AutofacWebApiDependencyResolver(container);
+
+            GlobalConfiguration.Configuration.DependencyResolver = resolver;
+
         }
     }
 }

@@ -8,14 +8,18 @@ using CarOwners.Service;
 using CarOwners.Service.Common;
 using CarOwners.Model;
 using System.Threading.Tasks;
-using CarOwners.WebAPI.Models;
+using AutoMapper;
 
 namespace CarOwners.WebAPI.Controllers
 {
     public class CarOwnersController : ApiController
     {
 
-        protected ICarOwnersService service = new CarOwnersService();
+        protected ICarOwnersService service;
+        public CarOwnersController(ICarOwnersService _service)
+        {
+            this.service = _service;
+        }
 
         [HttpGet]
         [Route("api/GetAll")]
@@ -25,14 +29,19 @@ namespace CarOwners.WebAPI.Controllers
             List<Person> ret = await service.GetAllAsync();
             List<RestPerson> restRet = new List<RestPerson>();
 
+
             if(ret.Count() == 0)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Table is empty!");
             }
 
-            foreach(Person person in ret)
+            var config = new MapperConfiguration(t => t.CreateMap<Person, RestPerson>());
+            var mapper = config.CreateMapper();
+
+            foreach (var person in ret)
             {
-                restRet.Add(new RestPerson { FullName = person.FullName, Age = person.Age });
+                RestPerson restPerson = mapper.Map<Person, RestPerson>(person);
+                restRet.Add(restPerson);
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, restRet);
@@ -53,9 +62,13 @@ namespace CarOwners.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound, "This person doesn't have a car.");
             }
 
-            foreach(Car car in ret)
+            var config = new MapperConfiguration(t => t.CreateMap<Car, RestCar>());
+            var mapper = config.CreateMapper();
+
+            foreach(var car in ret)
             {
-                restRet.Add(new RestCar { CarModel = car.CarModel, CarYear = car.CarYear, CarMillage = car.CarMillage });
+                RestCar restCar = mapper.Map<Car, RestCar>(car);
+                restRet.Add(restCar);
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, restRet);
@@ -108,6 +121,21 @@ namespace CarOwners.WebAPI.Controllers
 
             return Request.CreateResponse(HttpStatusCode.BadRequest, ret);
 
+        }
+
+        public class RestCar
+        {
+
+            public string CarModel { get; set; }
+            public int CarYear { get; set; }
+            public int CarMillage { get; set; }
+
+        }
+
+        public class RestPerson
+        {
+            public string FullName { get; set; }
+            public int Age { get; set; }
         }
 
     }

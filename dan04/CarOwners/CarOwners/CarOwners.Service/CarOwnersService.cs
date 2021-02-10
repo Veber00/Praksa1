@@ -7,16 +7,17 @@ using CarOwners.Service;
 using CarOwners.Repository;
 using CarOwners.Service.Common;
 using CarOwners.Model;
+using CarOwners.Repository.Common;
 
 namespace CarOwners.Service
 {
     public class CarOwnersService : ICarOwnersService
     {
 
-        protected CarOwnersRepository Rep { get; set; }
-        public CarOwnersService()
+        protected ICarOwnersRepository Rep { get; set; }
+        public CarOwnersService(ICarOwnersRepository _repository)
         {
-            Rep = new CarOwnersRepository();
+            this.Rep = _repository;
         }
 
         public async Task<List<Person>> GetAllAsync()
