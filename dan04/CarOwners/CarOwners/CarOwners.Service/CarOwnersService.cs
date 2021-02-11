@@ -20,9 +20,9 @@ namespace CarOwners.Service
             this.Rep = _repository;
         }
 
-        public async Task<List<Person>> GetAllAsync()
+        public async Task<List<Person>> GetAllAsync(int pageNumber, string sort)
         {
-            return await Rep.GetAllAsync();
+            return await Rep.GetAllAsync(pageNumber, sort);
         }
 
         public async Task<List<Car>> GetPersonCarAsync(int person_id)

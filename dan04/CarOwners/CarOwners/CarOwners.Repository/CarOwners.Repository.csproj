@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="CarOwnersRepository.cs" />
     <Compile Include="CarOwnersRepositoryModule.cs" />
+    <Compile Include="Paging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

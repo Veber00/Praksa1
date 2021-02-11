@@ -23,10 +23,10 @@ namespace CarOwners.WebAPI.Controllers
 
         [HttpGet]
         [Route("api/GetAll")]
-        public async Task<HttpResponseMessage> GetAllAsync()
+        public async Task<HttpResponseMessage> GetAllAsync([FromUri]int pageNumber, [FromUri]string sort)
         {
 
-            List<Person> ret = await service.GetAllAsync();
+            List<Person> ret = await service.GetAllAsync(pageNumber, sort);
             List<RestPerson> restRet = new List<RestPerson>();
 
 

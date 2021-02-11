@@ -9,7 +9,7 @@ namespace CarOwners.Service.Common
 {
     public interface ICarOwnersService
     {
-        Task<List<Person>> GetAllAsync();
+        Task<List<Person>> GetAllAsync(int pageNumber, string sort);
         Task<List<Car>> GetPersonCarAsync(int person_id);
         Task<string> NewPersonAsync(Person person);
         Task<string> UpdateCarAsync(int person_id, Car car);

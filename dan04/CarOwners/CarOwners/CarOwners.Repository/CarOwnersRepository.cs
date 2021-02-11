@@ -13,16 +13,41 @@ namespace CarOwners.Repository
     {
         SqlConnection con = new SqlConnection("data source=.; database=master; integrated security=SSPI");
 
-        public async Task<List<Person>> GetAllAsync()
+        public async Task<List<Person>> GetAllAsync(int pageNumber, string sort)
         {
-            
+
             List<Person> ret = new List<Person>();
+            int NumOfPages;
 
             using (con)
             {
-                SqlCommand cmd = new SqlCommand("SELECT * FROM person", con);
-
+                SqlCommand numOfItems = new SqlCommand("SELECT COUNT(*) FROM Person;", con);
                 con.Open();
+
+                Paging.NumberOfItems = (int)numOfItems.ExecuteScalar();
+                NumOfPages = Paging.NumberOfPages();
+
+                SqlCommand cmd;
+                int startFrom = (pageNumber - 1) * 10;
+
+                if(sort.ToLower() == "desc")
+                {
+                    cmd = new SqlCommand(String.Format("SELECT * FROM Person ORDER BY full_name DESC OFFSET {0} ROWS FETCH NEXT 10 ROWS ONLY;", startFrom), con);
+
+                }
+                else if(sort.ToLower() == "asc")
+                {
+                    cmd = new SqlCommand(String.Format("SELECT * FROM Person ORDER BY full_name ASC OFFSET {0} ROWS FETCH NEXT 10 ROWS ONLY;", startFrom), con);
+
+                }
+                else
+                {
+                    cmd = new SqlCommand(String.Format("SELECT * FROM Person ORDER BY(SELECT NULL) OFFSET {0} ROWS FETCH NEXT 10 ROWS ONLY;", startFrom), con);
+
+                }
+
+
+
                 SqlDataReader rdr = await Task.Run(() => cmd.ExecuteReader());
 
 
