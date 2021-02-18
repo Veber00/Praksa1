@@ -42,4 +42,9 @@ SELECT * FROM cars_owned;
 DELETE FROM cars_owned WHERE person_id = 2 AND car_model = 'BMW';
 
 UPDATE cars_owned SET car_millage = 66666 WHERE person_id=2 and car_model='Jaguar' and cars_owned_id=2;
-SELECT person_id FROM cars_owned WHERE person_id = 1 and car_model = 'ba' and cars_owned_id=2;
+
+SELECT * FROM Person ORDER BY full_name DESC OFFSET 0 ROWS FETCH NEXT 3 ROWS ONLY;
+
+SELECT * FROM Person ORDER BY full_name ASC OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY;
+
+SELECT * FROM Person ORDER BY(SELECT NULL) OFFSET 1 ROWS FETCH NEXT 10 ROWS ONLY;
